@@ -1,0 +1,12 @@
+{
+  "name": "くるっと立体パズル",
+  "short_name": "立体パズル",
+  "description": "立体を回して空間認識を鍛えるミニゲーム",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f8f4",
+  "theme_color": "#f4f8f4",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
+
