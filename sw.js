@@ -1,4 +1,4 @@
-const CACHE = 'spatial-game-v10';
+const CACHE = 'spatial-game-v11';
 const FILES = ['./', './index.html', './manifest.json', './icon.svg'];
 self.addEventListener('install', event => {
   self.skipWaiting();
@@ -13,9 +13,22 @@ self.addEventListener('activate', event => {
 });
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
-  event.respondWith(
-    fetch(event.request).catch(() =>
-      caches.match(event.request).then(cached => cached || caches.match('./index.html'))
-    )
-  );
+  event.respondWith((async () => {
+    try {
+      let request = event.request;
+      if (request.mode === 'navigate') {
+        const fresh = new URL(request.url);
+        fresh.searchParams.set('_refresh', CACHE);
+        request = new Request(fresh.toString(), { credentials: 'same-origin', cache: 'no-store' });
+      }
+      const response = await fetch(request);
+      if (event.request.mode === 'navigate' && response.ok) {
+        const cache = await caches.open(CACHE);
+        await cache.put(event.request, response.clone());
+      }
+      return response;
+    } catch (error) {
+      return (await caches.match(event.request)) || (await caches.match('./index.html'));
+    }
+  })());
 });
