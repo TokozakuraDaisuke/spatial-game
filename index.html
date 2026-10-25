@@ -12,7 +12,15 @@ const sectionRounds=[
 {solid:'円柱',cut:'斜めに切る',art:'cylinder-oblique',answer:'ellipse',options:['ellipse','circle','rectangle','quadrilateral']},
 {solid:'立方体',cut:'垂直に対角方向へ切る',art:'cube-vertical',answer:'rectangle',options:['rectangle','square','triangle','hexagon']},
 {solid:'立方体',cut:'3方向にまたがる斜め面で切る',art:'cube-oblique',answer:'hexagon',options:['hexagon','pentagon','circle','rectangle']},
-{solid:'三角錐',cut:'頂点を通らない斜めの面で切る',art:'pyramid-oblique',answer:'quadrilateral',options:['quadrilateral','rectangle','triangle','ellipse']}
+{solid:'三角錐',cut:'頂点を通らない斜めの面で切る',art:'pyramid-oblique',answer:'quadrilateral',options:['quadrilateral','rectangle','triangle','ellipse']},
+{solid:'円錐',cut:'底面に平行に切る',art:'cone-horizontal',answer:'circle',options:['circle','ellipse','triangle','square']},
+{solid:'円錐',cut:'頂点を通る垂直面で切る',art:'cone-vertical',answer:'triangle',options:['triangle','circle','rectangle','quadrilateral']},
+{solid:'球',cut:'中心を通る水平面で切る',art:'sphere-horizontal',answer:'circle',options:['circle','ellipse','square','hexagon']},
+{solid:'球',cut:'中心を通る斜めの面で切る',art:'sphere-oblique',answer:'circle',options:['circle','ellipse','triangle','rectangle']},
+{solid:'三角柱',cut:'三角形の底面に平行に切る',art:'triangular-prism-horizontal',answer:'triangle',options:['triangle','square','rectangle','quadrilateral']},
+{solid:'直方体',cut:'底面に平行に水平に切る',art:'rectangular-prism-horizontal',answer:'rectangle',options:['rectangle','square','triangle','hexagon']},
+{solid:'四角錐',cut:'底面に平行に切る',art:'square-pyramid-horizontal',answer:'square',options:['square','rectangle','triangle','circle']},
+{solid:'四角錐',cut:'頂点を通る垂直面で切る',art:'square-pyramid-vertical',answer:'triangle',options:['triangle','square','quadrilateral','circle']}
 ];
 const sectionLabels={triangle:'三角形',circle:'円',ellipse:'楕円',square:'正方形',rectangle:'長方形',quadrilateral:'四角形',pentagon:'五角形',hexagon:'六角形'};
 const sectionShapes={triangle:'<polygon points="60,12 99,70 21,70"/>',circle:'<circle cx="60" cy="42" r="29"/>',ellipse:'<ellipse cx="60" cy="42" rx="39" ry="23"/>',square:'<rect x="32" y="14" width="56" height="56"/>',rectangle:'<rect x="20" y="20" width="80" height="44"/>',quadrilateral:'<polygon points="32,17 84,22 96,66 23,63"/>',pentagon:'<polygon points="60,11 96,33 82,72 38,72 24,33"/>',hexagon:'<polygon points="39,13 81,13 101,42 81,71 39,71 19,42"/>'};
@@ -21,16 +29,24 @@ function sectionSvg(kind){
 const cube='<polygon points="150,75 220,110 150,145 80,110" fill="#c7f28b" stroke="#52796a" stroke-width="3"/><polygon points="150,230 80,195 80,110 150,145" fill="#8addb6" stroke="#52796a" stroke-width="3"/><polygon points="150,230 220,195 220,110 150,145" fill="#65c3a0" stroke="#52796a" stroke-width="3"/>';
 const pyramid='<polygon points="150,58 80,210 150,245" fill="#8addb6" stroke="#52796a" stroke-width="3"/><polygon points="150,58 150,245 220,210" fill="#65c3a0" stroke="#52796a" stroke-width="3"/><polygon points="150,58 220,210 80,210" fill="#c7f28b" fill-opacity=".72" stroke="#52796a" stroke-width="3"/><polygon points="80,210 220,210 150,245" fill="#65c3a0" stroke="#52796a" stroke-width="3"/>';
 const cylinder='<path d="M90 112 V220 C90 238 210 238 210 220 V112" fill="#d9f0e4" stroke="#52796a" stroke-width="3"/><ellipse cx="150" cy="112" rx="60" ry="25" fill="#c7f28b" stroke="#52796a" stroke-width="3"/><path d="M90 220 C90 187 210 187 210 220" fill="none" stroke="#52796a" stroke-width="3"/>';
+const cone='<path d="M150 62 L90 208 C90 237 210 237 210 208 Z" fill="#d9f0e4" stroke="#52796a" stroke-width="3"/><ellipse cx="150" cy="208" rx="60" ry="23" fill="#c7f28b" stroke="#52796a" stroke-width="3"/>';
+const sphere='<circle cx="150" cy="150" r="82" fill="#bde7d2" stroke="#52796a" stroke-width="3"/><path d="M95 112 C120 83 166 75 195 103" fill="none" stroke="#ffffff" stroke-opacity=".72" stroke-width="8" stroke-linecap="round"/><path d="M83 150 C100 130 200 130 217 150" fill="none" stroke="#85bda2" stroke-opacity=".42" stroke-width="2"/>';
+const prism='<polygon points="92,208 145,208 120,128" fill="#8addb6" stroke="#52796a" stroke-width="3"/><polygon points="158,168 211,168 186,88" fill="#c7f28b" stroke="#52796a" stroke-width="3"/><path d="M92 208 L158 168 M145 208 L211 168 M120 128 L186 88" fill="none" stroke="#52796a" stroke-width="3"/>';
+const cuboid='<polygon points="150,75 225,110 150,145 75,110" fill="#c7f28b" stroke="#52796a" stroke-width="3"/><polygon points="75,110 150,145 150,230 75,195" fill="#8addb6" stroke="#52796a" stroke-width="3"/><polygon points="150,145 225,110 225,195 150,230" fill="#65c3a0" stroke="#52796a" stroke-width="3"/>';
+const squarePyramid='<polygon points="150,65 82,180 150,215" fill="#8addb6" stroke="#52796a" stroke-width="3"/><polygon points="150,65 150,215 218,180" fill="#65c3a0" stroke="#52796a" stroke-width="3"/><polygon points="150,65 218,180 150,145" fill="#c7f28b" stroke="#52796a" stroke-width="3"/><polygon points="150,65 150,145 82,180" fill="#b6e9d0" stroke="#52796a" stroke-width="3"/><polygon points="82,180 150,145 218,180 150,215" fill="#72cba5" stroke="#52796a" stroke-width="3"/>';
 const dot=(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="6" fill="#e85f50" stroke="white" stroke-width="2.5"/>';
-let base='',points='';
-if(kind==='cube-horizontal'){base=cube;points=[[150,187],[220,152],[80,152],[150,117]]}
-if(kind==='cube-vertical'){base=cube;points=[[220,195],[80,195],[220,110],[80,110]]}
-if(kind==='cube-oblique'){base=cube;points=[[190,177],[115,177],[185,127],[115,127],[185,92],[115,92]]}
-if(kind==='pyramid-horizontal'){base=pyramid;points=[[115,134],[185,134],[150,151]]}
-if(kind==='pyramid-oblique'){base=pyramid;points=[[115,228],[185,228],[185,134],[115,134]]}
-if(kind==='cylinder-horizontal'){base=cylinder;points=[[91,166],[209,166],[150,142],[150,190]]}
-if(kind==='cylinder-vertical'){base=cylinder;points=[[120,112],[180,112],[120,220],[180,220]]}
-if(kind==='cylinder-oblique'){base=cylinder;points=[[201,135],[186,166],[136,196],[101,195],[116,164],[166,134]]}
+let base='',points=[];
+if(kind.startsWith('cube')){base=cube;if(kind==='cube-horizontal')points=[[150,187],[220,152],[80,152],[150,117]];if(kind==='cube-vertical')points=[[220,195],[80,195],[220,110],[80,110]];if(kind==='cube-oblique')points=[[190,177],[115,177],[185,127],[115,127],[185,92],[115,92]]}
+if(kind.startsWith('pyramid')){base=pyramid;if(kind==='pyramid-horizontal')points=[[115,134],[185,134],[150,151]];if(kind==='pyramid-oblique')points=[[115,228],[185,228],[185,134],[115,134]]}
+if(kind.startsWith('cylinder')){base=cylinder;if(kind==='cylinder-horizontal')points=[[91,166],[209,166],[150,142],[150,190]];if(kind==='cylinder-vertical')points=[[120,112],[180,112],[120,220],[180,220]];if(kind==='cylinder-oblique')points=[[201,135],[186,166],[136,196],[101,195],[116,164],[166,134]]}
+if(kind==='cone-horizontal'){base=cone;points=[[119,139],[181,139],[150,127],[150,151]]}
+if(kind==='cone-vertical'){base=cone;points=[[150,62],[90,208],[210,208]]}
+if(kind==='sphere-horizontal'){base=sphere;points=[[70,150],[230,150],[150,68],[150,232]]}
+if(kind==='sphere-oblique'){base=sphere;points=[[192,93],[205,142],[177,192],[108,207],[95,158],[123,108]]}
+if(kind==='triangular-prism-horizontal'){base=prism;points=[[125,188],[178,188],[153,108]]}
+if(kind==='rectangular-prism-horizontal'){base=cuboid;points=[[150,187],[225,152],[75,152],[150,117]]}
+if(kind==='square-pyramid-horizontal'){base=squarePyramid;points=[[150,140],[183,123],[150,105],[117,123]]}
+if(kind==='square-pyramid-vertical'){base=squarePyramid;points=[[150,65],[150,215],[150,145]]}
 return '<svg class="solid-diagram" viewBox="0 0 300 280" role="img" aria-label="立体の表面に赤い点で切断位置を表示">'+base+'<g class="cut-points">'+points.map(p=>dot(p[0],p[1])).join('')+'</g></svg>'
 }
 let n=0,score=0,locked=false,rx=-25,ry=35,drag=null,mode='solid',currentPlane=null,currentSection=null;
