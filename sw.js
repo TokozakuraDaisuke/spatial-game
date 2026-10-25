@@ -1,4 +1,4 @@
-const CACHE = 'spatial-game-v8';
+const CACHE = 'spatial-game-v9';
 const FILES = ['./', './index.html', './manifest.json', './icon.svg'];
 self.addEventListener('install', event => {
   self.skipWaiting();
