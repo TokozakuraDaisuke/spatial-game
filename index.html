@@ -74,7 +74,7 @@ function selectMode(next){mode=next;n=0;score=0;rx=-25;ry=35;document.getElement
 document.querySelectorAll('.mode-card').forEach(b=>b.onclick=()=>selectMode(b.dataset.mode));document.getElementById('changeMode').onclick=()=>{document.getElementById('gameArea').hidden=true;document.getElementById('modeChooser').hidden=false};document.getElementById('left').onclick=()=>turn('y',-25);document.getElementById('right').onclick=()=>turn('y',25);document.getElementById('up').onclick=()=>turn('x',25);
 function turn(axis,delta){if(mode==='section')return;if(axis==='y')ry+=delta;else rx=Math.max(-75,Math.min(75,rx+delta));renderMain()}
 document.getElementById('stage').onpointerdown=e=>{if(mode==='section')return;drag=[e.clientX,e.clientY];e.currentTarget.setPointerCapture(e.pointerId)};document.getElementById('stage').onpointermove=e=>{if(mode==='section'||!drag)return;ry+=(e.clientX-drag[0])*.65;rx=Math.max(-75,Math.min(75,rx-(e.clientY-drag[1])*.55));drag=[e.clientX,e.clientY];renderMain()};document.getElementById('stage').onpointerup=()=>drag=null;window.onkeydown=e=>{if(e.key==='ArrowLeft')turn('y',-20);if(e.key==='ArrowRight')turn('y',20);if(e.key==='ArrowUp')turn('x',20);if(e.key==='ArrowDown')turn('x',-20)};
-begin();</script><script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js"))}</script></body></html>
+begin();</script><script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}))}</script></body></html>
 
 
 
